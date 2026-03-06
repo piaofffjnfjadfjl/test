@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>タイピングゲーム</title>
+<style>
+body{
+    font-family: sans-serif;
+    text-align:center;
+    background:#f0f4ff;
+    margin:0;
+}
+
+.container{
+    max-width:500px;
+    margin:40px auto;
+    padding:20px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+#word{
+    font-size:32px;
+    margin:20px 0;
+    color:#333;
+}
+
+input{
+    font-size:20px;
+    padding:10px;
+    width:80%;
+}
+
+button{
+    margin-top:15px;
+    padding:10px 20px;
+    font-size:16px;
+    border:none;
+    background:#4CAF50;
+    color:white;
+    border-radius:5px;
+}
+
+#score,#time{
+    font-size:18px;
+    margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>タイピングゲーム</h1>
+
+<div id="time">残り時間: 30</div>
+<div id="score">スコア: 0</div>
+
+<div id="word">STARTを押してね</div>
+
+<input id="input" type="text" placeholder="ここに入力" disabled>
+
+<br>
+<button onclick="startGame()">START</button>
+
+</div>
+
+<script>
+
+const words = [
+"apple","banana","orange","grape","peach",
+"melon","strawberry","cherry","lemon","kiwi",
+"mango","pear","pineapple","watermelon"
+];
+
+let currentWord="";
+let score=0;
+let time=30;
+let timer;
+
+const wordDisplay=document.getElementById("word");
+const input=document.getElementById("input");
+const scoreDisplay=document.getElementById("score");
+const timeDisplay=document.getElementById("time");
+
+function randomWord(){
+    return words[Math.floor(Math.random()*words.length)];
+}
+
+function setWord(){
+    currentWord=randomWord();
+    wordDisplay.textContent=currentWord;
+}
+
+function startGame(){
+    score=0;
+    time=30;
+    input.disabled=false;
+    input.value="";
+    input.focus();
+    scoreDisplay.textContent="スコア: 0";
+    timeDisplay.textContent="残り時間: "+time;
+
+    setWord();
+
+    clearInterval(timer);
+    timer=setInterval(()=>{
+        time--;
+        timeDisplay.textContent="残り時間: "+time;
+
+        if(time<=0){
+            clearInterval(timer);
+            wordDisplay.textContent="ゲーム終了！";
+            input.disabled=true;
+        }
+
+    },1000);
+}
+
+input.addEventListener("input",()=>{
+    if(input.value===currentWord){
+        score++;
+        scoreDisplay.textContent="スコア: "+score;
+        input.value="";
+        setWord();
+    }
+});
+
+</script>
+
+</body>
+</html>
